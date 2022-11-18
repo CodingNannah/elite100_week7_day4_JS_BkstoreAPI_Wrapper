@@ -1,6 +1,7 @@
 import { getUser } from "./api/basicAuth.js"
 import { CancelToken } from "apisauce"
-import apiBook from "./api/item.js"
+import apiBook from "./api/book.js"
+import { registerUser, editUser, deleteUser } from "./api/user.js";
 
 // TESTS:
 // POSTS /user
@@ -20,16 +21,12 @@ import apiBook from "./api/item.js"
 
 const source = CancelToken.source();
 // source.token gets the actual token (returns the cancel token)
-const token = "console.log()"
+// const token = "ksZPjbuyyHHH8Z0hxXmpx0GkUi28crNDpFti92yCQgM"
+const token ='k-QFU27tKrK7Rm7h-h3qY0vqqEEkPF8kuNs2oCDajAc'
 
 // Login Function w admin! - need this for the token!
 const login = async (cancelToken) => {
-    const { user, error } = await getUser('codingnannah@gmail.com', '123', cancelToken)
-    // const { user, error } = await getUser('danannah.1@gmail.com', '1234', cancelToken)
-    // const { user, error } = await getUser('kevinb@codingtemple.com', '1234', cancelToken)
-    // const { user, error } = await getUser('please@gmail.com', '123', cancelToken)
-    // const { user, error } = await getUser('ross@friends.com', '123', cancelToken)
-    // const { user, error } = await getUser('cf@gmail.com', '1234', cancelToken)
+    const { user, error } = await getUser('lskywalker@tatooine.com', 'password', cancelToken)
     console.log(error ? error : "You are one with the force!")
     console.log(user ? user: "Commander Skywalker is missing!");
 } 
@@ -38,46 +35,49 @@ const login = async (cancelToken) => {
 // run with node index.js
 
 // GET/DISPLAY A BOOK
-const getBook = async (bookID, cancelToken) => {
-    const { error, book } = await apiBook.get(bookID, cancelToken)
+const getBook = async (cancelToken) => {
+    const { error, books } = await apiBook.get(cancelToken)
     console.log(error ? error : "You are one with the force!")
-    console.log(book ? book: "That Jedi sacred text is missing!");
+    console.log(books ? books: "That Jedi sacred text is missing!");
 };
-// getBook(2, source.token)
+getBook(source.token)
 
 
 // REGISTER A New User = POST
-const registerUser = async (cancelToken) => {
-    const userData = {
-      email: "lorgana@alderaan_senate.com",
-      first_name: "Leia",
-      last_name: "Organa",
-      password: "AA-23-2187",
-    };
-    const { error } = await registerUser.post(userData, cancelToken);
+const register = async (userData, cancelToken) => {
+  
+    const { error } = await registerUser(userData, cancelToken);
     // error or success?
-    console.log(error ? error : "You are one with the force!")
-    console.log(user ? user: "Commander Skywalker is missing!");        
+    console.log(error ? error : "You are one with the force!")     
 };
-// registerUser(userData, source.token)
+
+const userData = {
+  email: "lskywalker@tatooine.com",
+  first_name: "Luke",
+  last_name: "Skywalker",
+  password: "1234",
+};
+
+// register(userData, source.token)
 
 
 // EDIT USER
-const editUser = async (cancelToken) => {
-    const newData = {
-      last_name: "Skywalker",
-    };
-    const { error } = await editUser.put(token, id, newData, cancelToken);
+const edit = async (t, newData, cancelToken) => {
+   
+    const { error } = await editUser(t, newData, cancelToken);
     // error or success?
     console.log(error ? error : "You are one with the force!")
-    console.log(user ? user: "Commander Skywalker is missing!");
   };
-// editUser(id, newData, source.token) <-- pass in specifics
+  const newData = {
+    password: "password",
+  };
+
+// edit(token, newData, source.token) //<-- pass in specifics
 
 
   // DELETE USER
-const deleteUser = async (cancelToken) => {
-    const { error } = await deleteUser(token, id, cancelToken);
+const remove = async (t, cancelToken) => {
+    const { error } = await deleteUser(t, cancelToken);
     console.log(error ? error : "This user has turned to the Dark Side.");
   };
-// editUser(userData, id, source.token)  <-- pass in specifics
+// remove(token, source.token)  //<-- pass in specifics

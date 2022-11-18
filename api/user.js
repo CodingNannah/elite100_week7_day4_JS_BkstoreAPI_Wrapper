@@ -7,7 +7,7 @@ export const registerUser = async (userData, cancelToken) => {
   let error;
   const response = await clientNoAuth(cancelToken).post(userEndpoint, userData);
   if (!response.ok) {
-    error = "I'm gonna need to see some identification.";
+    error = "You are already in the system.";
   }
   return {
     error,
@@ -15,10 +15,10 @@ export const registerUser = async (userData, cancelToken) => {
 };
 
 // Edit a user = PUT
-export const editUser = async (token, id, data, cancelToken) => {
+export const editUser = async (token, data, cancelToken) => {
   let error;
   const response = await clientTokenAuth(token, cancelToken).put(
-    userEndpoint + "/" + id, data)
+    userEndpoint, data)
   if (!response.ok) {
     error = "I'm gonna need to see some identification.";
   }
@@ -29,9 +29,9 @@ export const editUser = async (token, id, data, cancelToken) => {
 
 
 // Delete a user
-export const deleteUser = async (token, id, cancelToken) => {
+export const deleteUser = async (token, cancelToken) => {
   let error;
-  const response = await clientTokenAuth(token, id, cancelToken).delete(
+  const response = await clientTokenAuth(token, cancelToken).delete(
     userEndpoint
   );
   if (!response.ok) {
